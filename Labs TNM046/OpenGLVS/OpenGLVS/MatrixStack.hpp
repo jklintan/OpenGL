@@ -56,7 +56,9 @@ public:
 	//Print the entire contents of the stack (for debugging purposes)
 	void print();
 
-private:
 	void matrixMult(float M1[], float M2[], float Mout[]);
 	void matrixPrint(float M[]);
+
+private:
+
 };

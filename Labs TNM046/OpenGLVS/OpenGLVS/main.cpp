@@ -22,7 +22,7 @@
 #include <cmath>
 
 //Window dimensions
-const GLuint WIDTH = 800, HEIGHT = 600;
+const GLuint WIDTH = 1200, HEIGHT = 800;
 
 using namespace std;
 
@@ -77,55 +77,84 @@ int main() {
 
 	Shader myShader("vertex.glsl", "fragment.glsl");
 
-	/* <---------------------- Vertex, index and transformation data ----------------------> */
+	/* <--------------- Vertex, index and transformation data ---------------> */
 
 	// Set up vertex data 
 	float vertices[] = {
 		// positions         // colors
-		 0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  // bottom right
-		-0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  // bottom left
-		 0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f   // top 
+		-1.0f, -1.0f,  1.0f,  1.0f, 0.0f, 0.0f,
+		 1.0f, -1.0f,  1.0f,  0.0f, 1.0f, 0.0f,
+		 1.0f,  1.0f,  1.0f,  0.0f, 0.0f, 1.0f,
+		-1.0f,  1.0f,  1.0f,  1.0f, 1.0f, 1.0f,
+
+		// back
+		-1.0f, -1.0f, -1.0f,  1.0f, 0.0f, 0.0f,
+		1.0f, -1.0f, -1.0f,   0.0f, 1.0f, 0.0f,
+		1.0f,  1.0f, -1.0f,   0.0f, 0.0f, 1.0f,
+		-1.0f,  1.0f, -1.0f,  1.0f, 1.0f, 1.0f,
 
 	};
 
-	//Translation matrix
-	GLfloat T[16] = { 
-		1.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, 0.0f,
-		0.5f, 0.5f, 0.0f, 1.0f 
-	}; 
-	
-	GLint  location_T; 
-	location_T = glGetUniformLocation(myShader.ID, "T"); 
-	glUseProgram(myShader.ID); 
-	glUniformMatrix4fv(location_T , 1, GL_FALSE , T); 
+	unsigned int indices[] = {  // note that we start from 0!
+		// front
+		0, 1, 2,
+		2, 3, 0,
 
-	//Rotation matrix, around z-axis
-	GLfloat R[16] = {
+		// right
+		1, 5, 6,
+		6, 2, 1,
+
+		// back
+		7, 6, 5,
+		5, 4, 7,
+
+		// left
+		4, 0, 3,
+		3, 7, 4,
+
+		// bottom
+		4, 5, 1,
+		1, 0, 4,
+
+		// top
+		3, 2, 6,
+		6, 7, 3
+	};
+
+	float R_90[16] = {
 		0.0f, 1.0f, 0.0f, 0.0f,
 		-1.0f, 0.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, 1.0f, 0.0f,
 		0.0f, 0.0f, 0.0f, 1.0f
 	};
 
-	GLint  location_R;
-	location_R = glGetUniformLocation(myShader.ID, "R");
-	glUseProgram(myShader.ID);
-	glUniformMatrix4fv(location_R, 1, GL_FALSE, R); //Copy the matrix
+	float unit[16] = {
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
+
+	float res[16];
+
 
 
 
 	/* <---------------------- Vertex data and buffer objects ----------------------> */
 
 	//Create vertex buffer object, vertex array object, element buffer object
-	unsigned int VBO, VAO;
+	unsigned int VBO, VAO, EBO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
+	// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
 	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	// position attribute
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
@@ -137,19 +166,22 @@ int main() {
 	// You can unbind the VAO afterwards, don't unbind VAO unless it's not necessary
 	// glBindVertexArray(0);
 
-
 	glBindBuffer(GL_ARRAY_BUFFER, 0); // The call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
+	
+	// remember: do NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO; keep the EBO bound.
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	
 	glBindVertexArray(0); // Unbind VAO
 
 	// Intialize the matrix to an identity transformation
 	myStack.init();
 
 	location_object = glGetUniformLocation(myShader.ID, "stackTransf");
-
 	
 	location_time = glGetUniformLocation(myShader.ID, "time"); if (location_time == -1) { 
 		cout  << "Unable  to  locate  variable'time'in  shader!" << endl;
 	}
+
 
 
 	// Rendering loop
@@ -166,19 +198,23 @@ int main() {
 		glUniform1f(location_time , time); // Copy  the  value to the  shader  program
 
 		// Clear the colorbuffer
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f); //Set clear color, background
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//glClear(GL_COLOR_BUFFER_BIT);
 
 		//glEnable(GL_CULL_FACE); //Enable back face culling
+		//glCullFace(GL_FRONT_AND_BACK);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //Set to wireframe mode
 
 
 		// Drawing
 		myShader.use();
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		//glDrawArrays(GL_TRIANGLES, 0, 12*3);
 
-		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 6*6, GL_UNSIGNED_INT, 0);
 		//glBindVertexArray(0); //No need to do every time
 
 
@@ -194,9 +230,11 @@ int main() {
 			//Add the object to the scene
 			myStack.push();
 				myStack.scale(0.2); //Scale to fit screen
-				myStack.rotY(time*M_PI /12); //Orbit rotation
-				myStack.translate(2, 0, 0); //Move the object along the x-axis
-				myStack.rotY(time*M_PI/2); //Rotate around own axis
+
+				myStack.rotY(M_PI /12); //Orbit rotation
+				myStack.translate(3, 0, 0); //Move the object along the x-axis
+				myStack.rotY(M_PI/2); //Rotate around own axis
+				//myStack.rotZ(time*M_PI / 2*10); //Rotate around own axis
 
 				// Update the transformation matrix in the shader
 				glUniformMatrix4fv(location_object, 1, GL_FALSE, myStack.getCurrentMatrix());
@@ -214,6 +252,7 @@ int main() {
 	// De-allocate resources
 	glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
 
 	// Terminate GLFW, clearing any resources allocated by GLFW.
 	glfwTerminate();

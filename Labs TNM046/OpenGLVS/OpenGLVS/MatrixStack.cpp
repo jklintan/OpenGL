@@ -181,4 +181,7 @@ void MatrixStack::matrixMult(float M1[], float M2[], float Mout[]) {
 	for (i = 0; i < 16; i++) {
 		Mout[i] = Mtemp[i];
 	}
+	
+	
+
 }
