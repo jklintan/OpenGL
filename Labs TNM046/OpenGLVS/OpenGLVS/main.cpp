@@ -79,63 +79,72 @@ int main() {
 
 	/* <--------------- Vertex, index and transformation data ---------------> */
 
+
 	// Set up vertex data 
 	float vertices[] = {
 		// positions         // colors
-		-1.0f, -1.0f,  1.0f,  1.0f, 0.0f, 0.0f,
-		 1.0f, -1.0f,  1.0f,  0.0f, 1.0f, 0.0f,
-		 1.0f,  1.0f,  1.0f,  0.0f, 0.0f, 1.0f,
-		-1.0f,  1.0f,  1.0f,  1.0f, 1.0f, 1.0f,
+		-1.0f, -1.0f,  0.5f,  1.0f, 0.0f, 0.0f, //0	Red	0
+		-1.0f, -1.0f,  0.5f,  1.0f, 0.0f, 1.0f, //0	Purple 1
+		-1.0f, -1.0f,  0.5f,  1.0f, 1.0f, 1.0f,	//0	White 2
+
+		 0.5f, -1.0f,  0.5f,  1.0f, 0.0f, 0.0f, //1 Red 3 
+		 0.5f, -1.0f,  0.5f,  0.0f, 0.0f, 1.0f, //1 Blue 4
+		 0.5f, -1.0f,  0.5f,  1.0f, 1.0f, 1.0f, //1 White 5
+
+		 0.5f,  1.0f,  0.5f,  1.0f, 0.0f, 0.0f, //2 Red 6
+		 0.5f,  1.0f,  0.5f,  0.0f, 0.0f, 1.0f, //2 Blue 7
+		 0.5f,  1.0f,  0.5f,  1.0f, 1.0f, 0.0f, //2 Yellow 8
+
+		-1.0f,  1.0f,  0.5f,  1.0f, 0.0f, 0.0f, //3 Red 9
+		-1.0f,  1.0f,  0.5f,  1.0f, 0.0f, 1.0f, //3 Purple 10 
+		-1.0f,  1.0f,  0.5f,  1.0f, 1.0f, 0.0f, //3 Yellow 11
 
 		// back
-		-1.0f, -1.0f, -1.0f,  1.0f, 0.0f, 0.0f,
-		1.0f, -1.0f, -1.0f,   0.0f, 1.0f, 0.0f,
-		1.0f,  1.0f, -1.0f,   0.0f, 0.0f, 1.0f,
-		-1.0f,  1.0f, -1.0f,  1.0f, 1.0f, 1.0f,
+		-1.0f, -1.0f, -1.0f,  0.0f, 1.0f, 0.0f, //4 Green 12
+		-1.0f, -1.0f, -1.0f,  1.0f, 0.0f, 1.0f, //4 Purple 13
+		-1.0f, -1.0f, -1.0f,  1.0f, 1.0f, 1.0f, //4 White 14
+
+		0.5f, -1.0f, -1.0f,   0.0f, 0.0f, 1.0f, //5 Blue 15
+		0.5f, -1.0f, -1.0f,   0.0f, 1.0f, 0.0f, //5 Green 16
+		0.5f, -1.0f, -1.0f,   1.0f, 1.0f, 1.0f, //5 White 17
+
+		0.5f,  1.0f, -1.0f,   0.0f, 0.0f, 1.0f, //6 Blue 18
+		0.5f,  1.0f, -1.0f,   0.0f, 1.0f, 0.0f, //6 Green 19
+		0.5f,  1.0f, -1.0f,   1.0f, 1.0f, 0.0f, //6 Yellow 20
+
+		-1.0f,  1.0f, -1.0f,  0.0f, 1.0f, 0.0f, //7 Green 21
+		-1.0f,  1.0f, -1.0f,  1.0f, 0.0f, 1.0f, //7 Purple 22
+		-1.0f,  1.0f, -1.0f,  1.0f, 1.0f, 0.0f, //7 Yellow 23
 
 	};
 
 	unsigned int indices[] = {  // note that we start from 0!
-		// front
-		0, 1, 2,
-		2, 3, 0,
+		// front, red
+		0, 3, 6,
+		6, 9, 0,
 
-		// right
-		1, 5, 6,
-		6, 2, 1,
+		// right, blue
+		4, 15, 18,
+		18, 7, 4,
 
-		// back
-		7, 6, 5,
-		5, 4, 7,
+		// back, green
+		21, 19, 16,
+		16, 12, 21,
 
-		// left
-		4, 0, 3,
-		3, 7, 4,
+		// left, purple
+		13, 1, 10,
+		10, 22, 13,
 
-		// bottom
-		4, 5, 1,
-		1, 0, 4,
+		// bottom, white
+		14, 17, 5,
+		5, 2, 14,
 
-		// top
-		3, 2, 6,
-		6, 7, 3
+		// top, yellow
+		11, 8, 20,
+		20, 23, 11
 	};
 
-	float R_90[16] = {
-		0.0f, 1.0f, 0.0f, 0.0f,
-		-1.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f
-	};
 
-	float unit[16] = {
-		1.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f
-	};
-
-	float res[16];
 
 
 
@@ -194,8 +203,8 @@ int main() {
 
 		//	Update time
 		time = (float)glfwGetTime(); 
-		glUseProgram(myShader.ID); //  Activate  the  shader  to set its  variables
-		glUniform1f(location_time , time); // Copy  the  value to the  shader  program
+		glUseProgram(myShader.ID); //  Activate the shader to set its variables
+		glUniform1f(location_time , time); // Copy  the  value to the shader program
 
 		// Clear the colorbuffer
 		glEnable(GL_DEPTH_TEST);
@@ -204,9 +213,9 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//glClear(GL_COLOR_BUFFER_BIT);
 
-		//glEnable(GL_CULL_FACE); //Enable back face culling
+		glEnable(GL_CULL_FACE); //Enable back face culling
 		//glCullFace(GL_FRONT_AND_BACK);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //Set to wireframe mode
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //Set to wireframe mode
 
 
 		// Drawing
@@ -215,6 +224,8 @@ int main() {
 		//glDrawArrays(GL_TRIANGLES, 0, 12*3);
 
 		glDrawElements(GL_TRIANGLES, 6*6, GL_UNSIGNED_INT, 0);
+
+
 		//glBindVertexArray(0); //No need to do every time
 
 
@@ -229,16 +240,16 @@ int main() {
 
 			//Add the object to the scene
 			myStack.push();
-				myStack.scale(0.2); //Scale to fit screen
+			myStack.scale(0.2); //Scale to fit screen
 
-				myStack.rotY(M_PI /12); //Orbit rotation
-				myStack.translate(3, 0, 0); //Move the object along the x-axis
-				myStack.rotY(M_PI/2); //Rotate around own axis
-				//myStack.rotZ(time*M_PI / 2*10); //Rotate around own axis
+			myStack.rotY(M_PI*time / 12); //Orbit rotation
+			myStack.translate(3, 0, 0); //Move the object along the x-axis
+			myStack.rotY(M_PI / 2); //Rotate around own axis
+			//myStack.rotZ(time*M_PI/20); //Rotate around own axis
 
-				// Update the transformation matrix in the shader
-				glUniformMatrix4fv(location_object, 1, GL_FALSE, myStack.getCurrentMatrix());
-			
+			// Update the transformation matrix in the shader
+			glUniformMatrix4fv(location_object, 1, GL_FALSE, myStack.getCurrentMatrix());
+
 			//Restore the matrix
 			myStack.pop();
 
