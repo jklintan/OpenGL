@@ -13,24 +13,29 @@
 //Include header files
 #include "Shader.hpp"
 #include "MatrixStack.hpp"
+#include "Utilities.hpp"
+#include "TriangleSoup.hpp"
 
 #ifndef M_PI
 #define M_PI (3.141592653589793)
 #endif
 
+
+
 //Math
 #include <cmath>
 
 //Window dimensions
-const GLuint WIDTH = 1200, HEIGHT = 800;
+const GLuint WIDTH = 800, HEIGHT = 800;
 
 using namespace std;
 
 int main() {
 
 	float  time; 
-	GLint  location_time, location_object;
+	GLint  location_time, location_object, location_light;
 	MatrixStack myStack;
+	TriangleSoup myShape;
 
 	// Init GLFW
 	glfwInit();
@@ -80,69 +85,69 @@ int main() {
 	/* <--------------- Vertex, index and transformation data ---------------> */
 
 
-	// Set up vertex data 
-	float vertices[] = {
-		// positions         // colors
-		-1.0f, -1.0f,  0.5f,  1.0f, 0.0f, 0.0f, //0	Red	0
-		-1.0f, -1.0f,  0.5f,  1.0f, 0.0f, 1.0f, //0	Purple 1
-		-1.0f, -1.0f,  0.5f,  1.0f, 1.0f, 1.0f,	//0	White 2
+	//// Set up vertex data 
+	//float vertices[] = {
+	//	// positions         // colors
+	//	-1.0f, -1.0f,  0.5f,  1.0f, 0.0f, 0.0f, //0	Red	0
+	//	-1.0f, -1.0f,  0.5f,  1.0f, 0.0f, 1.0f, //0	Purple 1
+	//	-1.0f, -1.0f,  0.5f,  1.0f, 1.0f, 1.0f,	//0	White 2
 
-		 0.5f, -1.0f,  0.5f,  1.0f, 0.0f, 0.0f, //1 Red 3 
-		 0.5f, -1.0f,  0.5f,  0.0f, 0.0f, 1.0f, //1 Blue 4
-		 0.5f, -1.0f,  0.5f,  1.0f, 1.0f, 1.0f, //1 White 5
+	//	 0.5f, -1.0f,  0.5f,  1.0f, 0.0f, 0.0f, //1 Red 3 
+	//	 0.5f, -1.0f,  0.5f,  0.0f, 0.0f, 1.0f, //1 Blue 4
+	//	 0.5f, -1.0f,  0.5f,  1.0f, 1.0f, 1.0f, //1 White 5
 
-		 0.5f,  1.0f,  0.5f,  1.0f, 0.0f, 0.0f, //2 Red 6
-		 0.5f,  1.0f,  0.5f,  0.0f, 0.0f, 1.0f, //2 Blue 7
-		 0.5f,  1.0f,  0.5f,  1.0f, 1.0f, 0.0f, //2 Yellow 8
+	//	 0.5f,  1.0f,  0.5f,  1.0f, 0.0f, 0.0f, //2 Red 6
+	//	 0.5f,  1.0f,  0.5f,  0.0f, 0.0f, 1.0f, //2 Blue 7
+	//	 0.5f,  1.0f,  0.5f,  1.0f, 1.0f, 0.0f, //2 Yellow 8
 
-		-1.0f,  1.0f,  0.5f,  1.0f, 0.0f, 0.0f, //3 Red 9
-		-1.0f,  1.0f,  0.5f,  1.0f, 0.0f, 1.0f, //3 Purple 10 
-		-1.0f,  1.0f,  0.5f,  1.0f, 1.0f, 0.0f, //3 Yellow 11
+	//	-1.0f,  1.0f,  0.5f,  1.0f, 0.0f, 0.0f, //3 Red 9
+	//	-1.0f,  1.0f,  0.5f,  1.0f, 0.0f, 1.0f, //3 Purple 10 
+	//	-1.0f,  1.0f,  0.5f,  1.0f, 1.0f, 0.0f, //3 Yellow 11
 
-		// back
-		-1.0f, -1.0f, -1.0f,  0.0f, 1.0f, 0.0f, //4 Green 12
-		-1.0f, -1.0f, -1.0f,  1.0f, 0.0f, 1.0f, //4 Purple 13
-		-1.0f, -1.0f, -1.0f,  1.0f, 1.0f, 1.0f, //4 White 14
+	//	// back
+	//	-1.0f, -1.0f, -1.0f,  0.0f, 1.0f, 0.0f, //4 Green 12
+	//	-1.0f, -1.0f, -1.0f,  1.0f, 0.0f, 1.0f, //4 Purple 13
+	//	-1.0f, -1.0f, -1.0f,  1.0f, 1.0f, 1.0f, //4 White 14
 
-		0.5f, -1.0f, -1.0f,   0.0f, 0.0f, 1.0f, //5 Blue 15
-		0.5f, -1.0f, -1.0f,   0.0f, 1.0f, 0.0f, //5 Green 16
-		0.5f, -1.0f, -1.0f,   1.0f, 1.0f, 1.0f, //5 White 17
+	//	0.5f, -1.0f, -1.0f,   0.0f, 0.0f, 1.0f, //5 Blue 15
+	//	0.5f, -1.0f, -1.0f,   0.0f, 1.0f, 0.0f, //5 Green 16
+	//	0.5f, -1.0f, -1.0f,   1.0f, 1.0f, 1.0f, //5 White 17
 
-		0.5f,  1.0f, -1.0f,   0.0f, 0.0f, 1.0f, //6 Blue 18
-		0.5f,  1.0f, -1.0f,   0.0f, 1.0f, 0.0f, //6 Green 19
-		0.5f,  1.0f, -1.0f,   1.0f, 1.0f, 0.0f, //6 Yellow 20
+	//	0.5f,  1.0f, -1.0f,   0.0f, 0.0f, 1.0f, //6 Blue 18
+	//	0.5f,  1.0f, -1.0f,   0.0f, 1.0f, 0.0f, //6 Green 19
+	//	0.5f,  1.0f, -1.0f,   1.0f, 1.0f, 0.0f, //6 Yellow 20
 
-		-1.0f,  1.0f, -1.0f,  0.0f, 1.0f, 0.0f, //7 Green 21
-		-1.0f,  1.0f, -1.0f,  1.0f, 0.0f, 1.0f, //7 Purple 22
-		-1.0f,  1.0f, -1.0f,  1.0f, 1.0f, 0.0f, //7 Yellow 23
+	//	-1.0f,  1.0f, -1.0f,  0.0f, 1.0f, 0.0f, //7 Green 21
+	//	-1.0f,  1.0f, -1.0f,  1.0f, 0.0f, 1.0f, //7 Purple 22
+	//	-1.0f,  1.0f, -1.0f,  1.0f, 1.0f, 0.0f, //7 Yellow 23
 
-	};
+	//};
 
-	unsigned int indices[] = {  // note that we start from 0!
-		// front, red
-		0, 3, 6,
-		6, 9, 0,
+	//unsigned int indices[] = {  // note that we start from 0!
+	//	// front, red
+	//	0, 3, 6,
+	//	6, 9, 0,
 
-		// right, blue
-		4, 15, 18,
-		18, 7, 4,
+	//	// right, blue
+	//	4, 15, 18,
+	//	18, 7, 4,
 
-		// back, green
-		21, 19, 16,
-		16, 12, 21,
+	//	// back, green
+	//	21, 19, 16,
+	//	16, 12, 21,
 
-		// left, purple
-		13, 1, 10,
-		10, 22, 13,
+	//	// left, purple
+	//	13, 1, 10,
+	//	10, 22, 13,
 
-		// bottom, white
-		14, 17, 5,
-		5, 2, 14,
+	//	// bottom, white
+	//	14, 17, 5,
+	//	5, 2, 14,
 
-		// top, yellow
-		11, 8, 20,
-		20, 23, 11
-	};
+	//	// top, yellow
+	//	11, 8, 20,
+	//	20, 23, 11
+	//};
 
 
 
@@ -151,53 +156,58 @@ int main() {
 
 	/* <---------------------- Vertex data and buffer objects ----------------------> */
 
-	//Create vertex buffer object, vertex array object, element buffer object
-	unsigned int VBO, VAO, EBO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
-	// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-	glBindVertexArray(VAO);
+	////Create vertex buffer object, vertex array object, element buffer object
+	//unsigned int VBO, VAO, EBO;
+	//glGenVertexArrays(1, &VAO);
+	//glGenBuffers(1, &VBO);
+	//glGenBuffers(1, &EBO);
+	//// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
+	//glBindVertexArray(VAO);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	// position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	// color attribute
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
+	//// position attribute
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	//glEnableVertexAttribArray(0);
+	//// color attribute
+	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	//glEnableVertexAttribArray(1);
 
-	// You can unbind the VAO afterwards, don't unbind VAO unless it's not necessary
-	// glBindVertexArray(0);
+	//// You can unbind the VAO afterwards, don't unbind VAO unless it's not necessary
+	//// glBindVertexArray(0);
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0); // The call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
-	
-	// remember: do NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO; keep the EBO bound.
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	
-	glBindVertexArray(0); // Unbind VAO
+	//glBindBuffer(GL_ARRAY_BUFFER, 0); // The call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
+	//
+	//// remember: do NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO; keep the EBO bound.
+	////glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	//
+	//glBindVertexArray(0); // Unbind VAO
 
 	// Intialize the matrix to an identity transformation
 	myStack.init();
 
 	location_object = glGetUniformLocation(myShader.ID, "stackTransf");
+
+	location_light = glGetUniformLocation(myShader.ID, "lightDirection");
 	
 	location_time = glGetUniformLocation(myShader.ID, "time"); if (location_time == -1) { 
 		cout  << "Unable  to  locate  variable'time'in  shader!" << endl;
 	}
 
-
+	myShape.createSphere(0.8, 50);
+	//myShape.createBox(0.5, 0.5, 0.5);
 
 	// Rendering loop
 	while (!glfwWindowShouldClose(window))
 	{
 		// Check key press event
 		glfwPollEvents();
+
+
 
 		/* <--- Rendering loop ---> */
 
@@ -206,10 +216,13 @@ int main() {
 		glUseProgram(myShader.ID); //  Activate the shader to set its variables
 		glUniform1f(location_time , time); // Copy  the  value to the shader program
 
-		// Clear the colorbuffer
+		GLuint loc = glGetUniformLocation(myShader.ID, "lightDirection");
+		glUniform3fv(loc, sizeof(loc), (float*)loc);
+
+		//// Clear the colorbuffer
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f); //Set clear color, background
+		glClearColor(0.2f, 0.2f, 0.2f, 0.0f); //Set clear color, background
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//glClear(GL_COLOR_BUFFER_BIT);
 
@@ -218,40 +231,44 @@ int main() {
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //Set to wireframe mode
 
 
-		// Drawing
+		//// Drawing
 		myShader.use();
-		glBindVertexArray(VAO);
-		//glDrawArrays(GL_TRIANGLES, 0, 12*3);
+		
+		//glBindVertexArray(VAO);
+		////glDrawArrays(GL_TRIANGLES, 0, 12*3);
 
-		glDrawElements(GL_TRIANGLES, 6*6, GL_UNSIGNED_INT, 0);
+		//glDrawElements(GL_TRIANGLES, 6*6, GL_UNSIGNED_INT, 0);
 
+		myShape.render();
 
 		//glBindVertexArray(0); //No need to do every time
-
+		
 
 		//Start the stack operations, draw the scene
 		myStack.push();
-
 			// The view transformations, world frame
 			//Rotate a small angle around x
-			myStack.rotX(M_PI / 12);
+			myStack.rotX(M_PI*time / 12);
+
 			// Update the transformation matrix in the shader
 			glUniformMatrix4fv(location_object, 1, GL_FALSE, myStack.getCurrentMatrix());
 
 			//Add the object to the scene
 			myStack.push();
-			myStack.scale(0.2); //Scale to fit screen
+			myStack.scale(0.5); //Scale to fit screen
 
 			myStack.rotY(M_PI*time / 12); //Orbit rotation
-			myStack.translate(3, 0, 0); //Move the object along the x-axis
-			myStack.rotY(M_PI / 2); //Rotate around own axis
+			//myStack.translate(1, 0, 0); //Move the object along the x-axis
+			//myStack.rotY(M_PI/ 2); //Rotate around own axis
 			//myStack.rotZ(time*M_PI/20); //Rotate around own axis
 
 			// Update the transformation matrix in the shader
 			glUniformMatrix4fv(location_object, 1, GL_FALSE, myStack.getCurrentMatrix());
-
+			
 			//Restore the matrix
 			myStack.pop();
+
+			
 
 		//Restore the initial matrix
 		myStack.pop();
@@ -261,9 +278,9 @@ int main() {
 	}
 
 	// De-allocate resources
-	glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);
+	//glDeleteVertexArrays(1, &VAO);
+ //   glDeleteBuffers(1, &VBO);
+	//glDeleteBuffers(1, &EBO);
 
 	// Terminate GLFW, clearing any resources allocated by GLFW.
 	glfwTerminate();
