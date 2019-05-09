@@ -1,4 +1,5 @@
 #include "MatrixStack.hpp"
+#include <math.h>
 
 //Constructor
 MatrixStack::MatrixStack() {
@@ -181,7 +182,21 @@ void MatrixStack::matrixMult(float M1[], float M2[], float Mout[]) {
 	for (i = 0; i < 16; i++) {
 		Mout[i] = Mtemp[i];
 	}
-	
-	
+}
 
+//Perspective projection 
+// M is the matrix we want to create (an output argument) 
+// vfov is the vertical field of view (in the y direction) 
+// aspect is the aspect ratio of the viewport (width/height) 
+// znear is the distance to the near clip plane (znear > 0) 
+// zfar is the distance to the far clip plane (zfar > znear)
+void MatrixStack::mat4perspective(float M[], float vfov, float aspect, float znear, float zfar) {
+	float P[16] = { 0 };
+	float f = cos(vfov/2) / sin(vfov/2);
+	P[0] = f/aspect;
+	P[5] = f;
+	P[10] = -(zfar+znear) / (zfar-znear);
+	P[11] = -(2*zfar*znear) / (zfar - znear);
+	P[14] = -1;
+	matrixMult(P, currentMatrix->m, M);
 }

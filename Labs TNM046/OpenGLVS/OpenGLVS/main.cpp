@@ -138,29 +138,23 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//glClear(GL_COLOR_BUFFER_BIT);
 
-		glEnable(GL_CULL_FACE); //Enable back face culling
+		//glEnable(GL_CULL_FACE); //Enable back face culling
 		//glCullFace(GL_FRONT_AND_BACK);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //Set to wireframe mode
 
 
 		//// Drawing
 		myShader.use();
-		
-		//glBindVertexArray(VAO);
-		////glDrawArrays(GL_TRIANGLES, 0, 12*3);
-
-		//glDrawElements(GL_TRIANGLES, 6*6, GL_UNSIGNED_INT, 0);
-
 		myShape.render();
-		//glBindVertexArray(0); //No need to do every time
 		
 		//Start the stack operations, draw the scene with transformation
 		myStack.push();
 
 			// The view transformations, world frame
-			//Rotate a small angle around x
-			//myStack.rotX(M_PI / 12);
+			myStack.rotX(M_PI / 20);
+			myStack.translate(0, -0.1, 0.2);
 			//myStack.rotY(M_PI / 12);
+			//myStack.rotY(M_PI);
 
 			// Update the transformation matrix in the shader
 			glUniformMatrix4fv(location_object, 1, GL_FALSE, myStack.getCurrentMatrix());
@@ -171,16 +165,23 @@ int main() {
 
 			//myStack.rotY(M_PI*time / 12); //Orbit rotation
 			//myStack.translate(1, 0, 0); //Move the object along the x-axis
-			myStack.rotY(M_PI*time/ 12); //Rotate around own axis
+			myStack.rotY(time/ 10); //Rotate around own axis
 			//myStack.rotZ(time*M_PI/20); //Rotate around own axis
 
 			// Update the transformation matrix in the shader
 			glUniformMatrix4fv(location_object, 1, GL_FALSE, myStack.getCurrentMatrix());
-			
+
 			//Restore the matrix
 			myStack.pop();
 
-			
+			//Update the Projection matrix in the shader
+			float PM[16] = { 0 };
+			myStack.translate(0, 0, -2);
+			myStack.mat4perspective(PM, M_PI/4, 1, 0.5, 10);
+			glUniformMatrix4fv(projection, 1, GL_FALSE, PM);
+
+
+
 
 		//Restore the initial matrix
 		myStack.pop();

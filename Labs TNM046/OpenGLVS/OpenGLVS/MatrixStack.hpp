@@ -59,6 +59,9 @@ public:
 	void matrixMult(float M1[], float M2[], float Mout[]);
 	void matrixPrint(float M[]);
 
+	//Multiply with perspective matrix
+	void mat4perspective(float M[], float vfov, float aspect, float znear, float zfar);
+
 private:
 
 };

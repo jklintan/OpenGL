@@ -12,7 +12,7 @@ vec3 objectColor = vec3(0.0f, 0.0f, 1.0f);
 vec3 lightColor = vec3(0.4f, 0.4f, 0.4f);
 vec3 diffuseColor = vec3(1.0f, 0.0f, 0.0f);
 //vec3 lightDirection = vec3(0.7, 0.5, 1.0);
-float ambientStrength = 5;
+float ambientStrength = 3;
 float specularStrength = 0.8;
 float diffuseStrength = 0.8;
 vec3 viewPos = vec3(0.0, 0.0, 1.0);
@@ -38,5 +38,8 @@ void main()
     shading = max(0.0, shading);
 
 	vec3 result = (Ia+Id+Is)*lightColor;
-	finalcolor = vec4(result*vec3(shading), 1.0);
+	//finalcolor = vec4(result*vec3(shading), 1.0);
+
+	//Set final color to white for testing perspective projection
+	finalcolor = vec4(1.0, 1.0, 1.0, 1.0);
 }

@@ -19,8 +19,8 @@ out vec2 st;
 out vec3 lightDirection;
 
 void main(){
-
-    gl_Position = stackTransf*time*vec4(Position, 1.0);
+	//MV = P*view*model;
+    gl_Position = P*stackTransf*time*vec4(Position, 1.0);
     vec3 transformedNormal = mat3(stackTransf)*Normal;
 	interpolatedNormal = normalize(transformedNormal);
     st = TexCoord;
