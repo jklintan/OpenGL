@@ -4,10 +4,9 @@
 uniform float time;
 uniform mat4 T;
 uniform mat4 R;
-uniform mat4 stackTransf;
+uniform mat4 stackTransf; //Model view
 
 //For perspective projection
-uniform mat4 MV;
 uniform mat4 P;
 
 layout (location = 0) in vec3 Position;   // the position variable has attribute position 0
@@ -17,13 +16,16 @@ layout (location = 2) in vec2 TexCoord;
 out vec3 interpolatedNormal; // output a color to the fragment shader
 out vec2 st;
 out vec3 lightDirection;
+out vec3 fragPos;
 
 void main(){
-	//MV = P*view*model;
-    gl_Position = P*stackTransf*time*vec4(Position, 1.0);
+    gl_Position = P*stackTransf*vec4(Position, 1.0); //Transform pixels into 
     vec3 transformedNormal = mat3(stackTransf)*Normal;
 	interpolatedNormal = normalize(transformedNormal);
+	fragPos = vec3(stackTransf*vec4(Position, 1.0))*Normal;
+
     st = TexCoord;
-	vec4 result = stackTransf*vec4(1.0, 1.0, 1.0, 1.0);
+
+	vec4 result = vec4(1.0, 1.0, 1.0, 1.0);
 	lightDirection = vec3(result);
 }  

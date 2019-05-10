@@ -1,9 +1,10 @@
 ﻿  main.cpp
-c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(103): warning C4244: '=': conversion from 'GLint' to 'GLfloat', possible loss of data
-c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(105): warning C4244: '=': conversion from 'GLint' to 'GLfloat', possible loss of data
-c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(116): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(154): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(104): warning C4244: '=': conversion from 'GLint' to 'GLfloat', possible loss of data
+c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(106): warning C4244: '=': conversion from 'GLint' to 'GLfloat', possible loss of data
+c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(117): warning C4305: 'argument': truncation from 'double' to 'float'
 c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(155): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(156): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(170): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(180): warning C4305: 'argument': truncation from 'double' to 'float'
 c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(181): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
   OpenGLVS.vcxproj -> C:\Users\josef\Desktop\OpenGLRoot\Labs TNM046\OpenGLVS\Debug\OpenGLVS.exe

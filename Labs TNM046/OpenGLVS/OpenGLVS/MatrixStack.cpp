@@ -192,7 +192,7 @@ void MatrixStack::matrixMult(float M1[], float M2[], float Mout[]) {
 // zfar is the distance to the far clip plane (zfar > znear)
 void MatrixStack::mat4perspective(float M[], float vfov, float aspect, float znear, float zfar) {
 	float P[16] = { 0 };
-	float f = cos(vfov/2) / sin(vfov/2);
+	float f = cos(vfov/2) / sin(vfov/2); //Distance from camera to projection plane
 	P[0] = f/aspect;
 	P[5] = f;
 	P[10] = -(zfar+znear) / (zfar-znear);

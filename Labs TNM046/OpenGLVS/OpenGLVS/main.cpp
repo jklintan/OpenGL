@@ -36,6 +36,7 @@ int main() {
 	GLfloat modelview, projection;
 	MatrixStack myStack; //Stack used for transformations
 	TriangleSoup myShape; 
+	float PM[16] = { 0 }; //Initialize projection matrix
 
 	// Init GLFW
 	glfwInit();
@@ -113,7 +114,7 @@ int main() {
 	myStack.init();
 
 	//myShape.createSphere(0.8, 50);
-	myShape.createBox(0.2, 0.2, 1);
+	myShape.createBox(0.3, 0.3, 0.3);
 
 	// Rendering loop
 	while (!glfwWindowShouldClose(window))
@@ -138,9 +139,9 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//glClear(GL_COLOR_BUFFER_BIT);
 
-		//glEnable(GL_CULL_FACE); //Enable back face culling
+		glEnable(GL_CULL_FACE); //Enable back face culling
 		//glCullFace(GL_FRONT_AND_BACK);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //Set to wireframe mode
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //Set to wireframe mode
 
 
 		//// Drawing
@@ -157,7 +158,7 @@ int main() {
 			//myStack.rotY(M_PI);
 
 			// Update the transformation matrix in the shader
-			glUniformMatrix4fv(location_object, 1, GL_FALSE, myStack.getCurrentMatrix());
+			//glUniformMatrix4fv(location_object, 1, GL_FALSE, myStack.getCurrentMatrix());
 
 			//Add the object to the scene
 			myStack.push();
@@ -166,7 +167,7 @@ int main() {
 			//myStack.rotY(M_PI*time / 12); //Orbit rotation
 			//myStack.translate(1, 0, 0); //Move the object along the x-axis
 			myStack.rotY(time/ 10); //Rotate around own axis
-			//myStack.rotZ(time*M_PI/20); //Rotate around own axis
+			myStack.rotZ(time*M_PI/20); //Rotate around own axis
 
 			// Update the transformation matrix in the shader
 			glUniformMatrix4fv(location_object, 1, GL_FALSE, myStack.getCurrentMatrix());
@@ -174,14 +175,10 @@ int main() {
 			//Restore the matrix
 			myStack.pop();
 
-			//Update the Projection matrix in the shader
-			float PM[16] = { 0 };
+			//Perform the perspective projection
 			myStack.translate(0, 0, -2);
-			myStack.mat4perspective(PM, M_PI/4, 1, 0.5, 10);
-			glUniformMatrix4fv(projection, 1, GL_FALSE, PM);
-
-
-
+			myStack.mat4perspective(PM, M_PI/4, 1, 0.5, 10); //Turns PM into the correct projection matrix and multiply to current matrix
+			glUniformMatrix4fv(projection, 1, GL_FALSE, PM); //Send the projection matrix to the vertex shader
 
 		//Restore the initial matrix
 		myStack.pop();
