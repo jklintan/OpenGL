@@ -27,4 +27,4 @@ After the specular light is added. The difference between an exponent of 4 and o
 
 # Texturing
 
-<img src="images/textured.PNG" width="400" height="400"/> <img src="images/textured.PNG" width="400" height="400"/>
+<img src="images/textured.PNG" width="400" height="400"/> <img src="images/textured2.PNG" width="400" height="400"/>
