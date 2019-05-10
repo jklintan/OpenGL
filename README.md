@@ -27,9 +27,9 @@ After the specular light is added. The difference between an exponent of 4 and o
 
 # Texturing
 Implementations of texturing from images and with help of texturing coordinates calculated for the box. 
-<br/>
+<br/><br/>
 <img src="images/textured.PNG" width="400" height="400"/> <img src="images/textured2.PNG" width="400" height="400"/>
 <br/>
 <img src="images/texturedlight.PNG" width="400" height="400"/> <img src="images/textured2light.PNG" width="400" height="400"/>
 <br/>
-The same textures but now implemented in the Phong Shading Model above. The diffuse term now comes from the texture instead of color. 
+In the two images on the top you can see how the box looks when getting textures. In the lower images it is the same textures but now implemented in the Phong Shading Model as showed above. The diffuse term now comes from the texture instead of color. 
