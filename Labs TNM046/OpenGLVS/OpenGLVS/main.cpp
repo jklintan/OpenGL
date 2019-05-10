@@ -32,7 +32,7 @@ int main() {
 
 	//Declaration of variables
 	float  time; 
-	GLint  location_time, location_object, location_light;
+	GLint  location_time, location_object, location_light, location_view;
 	GLfloat modelview, projection;
 	MatrixStack myStack; //Stack used for transformations
 	TriangleSoup myShape; 
@@ -81,7 +81,7 @@ int main() {
 
 	/* <---------------------- Compilation of Shader ----------------------> */
 
-	Shader myShader("vertex.glsl", "fragment.glsl");
+	Shader lightningShader("vertex.glsl", "fragment.glsl");
 
 	/* <--------------- Vertex, index and transformation data ---------------> */
 	
@@ -89,21 +89,21 @@ int main() {
 
 	/* <---------------------- Create and send vertex data and buffer objects ----------------------> */
 
-	//Is now done inside the triangle Soup class
+	//Is now done inside the triangle Soup class for objects
 
 	/* <---------------------- Shader variables ----------------------> */
 
-	location_object = glGetUniformLocation(myShader.ID, "stackTransf");
+	location_object = glGetUniformLocation(lightningShader.ID, "model");
 
-	location_light = glGetUniformLocation(myShader.ID, "lightDirection");
+	location_view = glGetUniformLocation(lightningShader.ID, "view");
+
+	location_light = glGetUniformLocation(lightningShader.ID, "lightDirection");
 	
-	location_time = glGetUniformLocation(myShader.ID, "time"); if (location_time == -1) { 
-		cout  << "Unable  to  locate  variable'time'in  shader!" << endl;
+	location_time = glGetUniformLocation(lightningShader.ID, "time"); if (location_time == -1) { 
+		cout  << "Unable  to  locate  variable 'time' in  shader!" << endl;
 	}
 
-	modelview = glGetUniformLocation(myShader.ID, "MV");
-
-	projection = glGetUniformLocation(myShader.ID, "P");
+	projection = glGetUniformLocation(lightningShader.ID, "projection");
 	//glUniformMatrix4fv(projection, 1, GL_FALSE, projection.glLoadIdentity()); //Replace the current matrix with identity matrix
 
 	//Note, we use the upper 3x3 of the MV matrix as normal matrix
@@ -114,7 +114,7 @@ int main() {
 	myStack.init();
 
 	//myShape.createSphere(0.8, 50);
-	myShape.createBox(0.3, 0.3, 0.3);
+	myShape.createBox(0.5, 0.5, 0.5);
 
 	// Rendering loop
 	while (!glfwWindowShouldClose(window))
@@ -126,16 +126,16 @@ int main() {
 
 		//	Update time
 		time = (float)glfwGetTime(); 
-		glUseProgram(myShader.ID); //  Activate the shader to set its variables
+		glUseProgram(lightningShader.ID); //  Activate the shader to set its variables
 		glUniform1f(location_time , time); // Copy  the  value to the shader program
 
-		GLuint loc = glGetUniformLocation(myShader.ID, "lightDirection");
-		glUniform3fv(loc, sizeof(loc), (float*)loc);
+		//GLuint loc = glGetUniformLocation(lightningShader.ID, "lightDirection");
+		//glUniform3fv(loc, sizeof(loc), (float*)loc);
 
 		//// Clear the colorbuffer
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
-		glClearColor(0.2f, 0.2f, 0.2f, 0.0f); //Set clear color, background
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f); //Set clear color, background
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//glClear(GL_COLOR_BUFFER_BIT);
 
@@ -145,7 +145,7 @@ int main() {
 
 
 		//// Drawing
-		myShader.use();
+		lightningShader.use();
 		myShape.render();
 		
 		//Start the stack operations, draw the scene with transformation
@@ -153,21 +153,22 @@ int main() {
 
 			// The view transformations, world frame
 			myStack.rotX(M_PI / 20);
-			myStack.translate(0, -0.1, 0.2);
+			myStack.translate(0, -0.1, 0);
 			//myStack.rotY(M_PI / 12);
 			//myStack.rotY(M_PI);
 
-			// Update the transformation matrix in the shader
-			//glUniformMatrix4fv(location_object, 1, GL_FALSE, myStack.getCurrentMatrix());
+			// Update the view matrix in the shader
+			glUniformMatrix4fv(location_view, 1, GL_FALSE, myStack.getCurrentMatrix());
 
 			//Add the object to the scene
 			myStack.push();
-			myStack.scale(0.5); //Scale to fit screen
+			myStack.scale(0.8); //Scale to fit screen
 
 			//myStack.rotY(M_PI*time / 12); //Orbit rotation
 			//myStack.translate(1, 0, 0); //Move the object along the x-axis
-			myStack.rotY(time/ 10); //Rotate around own axis
-			myStack.rotZ(time*M_PI/20); //Rotate around own axis
+			//myStack.rotY(time/ 10); //Rotate around own axis
+			//myStack.rotZ(time*M_PI/20); //Rotate around own axis
+			myStack.rotY(M_PI / 4);
 
 			// Update the transformation matrix in the shader
 			glUniformMatrix4fv(location_object, 1, GL_FALSE, myStack.getCurrentMatrix());
