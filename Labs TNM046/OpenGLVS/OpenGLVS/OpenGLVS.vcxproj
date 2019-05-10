@@ -127,16 +127,19 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MatrixStack.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TriangleSoup.cpp" />
     <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="fragment.glsl" />
+    <None Include="fragmentTex.glsl" />
     <None Include="vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MatrixStack.hpp" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Texture.hpp" />
     <ClInclude Include="TriangleSoup.hpp" />
     <ClInclude Include="Utilities.hpp" />
   </ItemGroup>

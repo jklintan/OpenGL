@@ -138,46 +138,46 @@ void TriangleSoup::createBox(float xsize, float ysize, float zsize) {
 
 		//Vertex 0
 		-xsize, -ysize, zsize,	0.0f, 0.0f, 1.0f,	0.0f, 0.0f, //Front
-		-xsize, -ysize, zsize,	-1.0f, 0.0f, 0.0f,	0.0f, 0.0f, //Left
-		-xsize, -ysize, zsize,	0.0f, -1.0f, 0.0f,	0.0f, 0.0f, //Bottom
+		-xsize, -ysize, zsize,	-1.0f, 0.0f, 0.0f,	1.0f, 0.0f, //Left
+		-xsize, -ysize, zsize,	0.0f, -1.0f, 0.0f,	0.0f, 1.0f, //Bottom
 
 		//Vertex 1
-		xsize, -ysize, zsize,	0.0f, 0.0f, 1.0f,	0.0f, 0.0f, //Front
+		xsize, -ysize, zsize,	0.0f, 0.0f, 1.0f,	1.0f, 0.0f, //Front
 		xsize, -ysize, zsize,	1.0f, 0.0f, 0.0f,	0.0f, 0.0f, //Right
-		xsize, -ysize, zsize,	0.0f, -1.0f, 0.0f,	0.0f, 0.0f, //Bottom
+		xsize, -ysize, zsize,	0.0f, -1.0f, 0.0f,	1.0f, 1.0f, //Bottom
 
 		//Vertex 2
-		xsize, ysize, zsize,	0.0f, 0.0f, 1.0f,	0.0f, 0.0f, //Front
-		xsize, ysize, zsize,	1.0f, 0.0f, 0.0f,	0.0f, 0.0f, //Right
-		xsize, ysize, zsize,	0.0f, 1.0f, 0.0f,	0.0f, 0.0f, //Top
+		xsize, ysize, zsize,	0.0f, 0.0f, 1.0f,	1.0f, 1.0f, //Front
+		xsize, ysize, zsize,	1.0f, 0.0f, 0.0f,	0.0f, 1.0f, //Right
+		xsize, ysize, zsize,	0.0f, 1.0f, 0.0f,	1.0f, 0.0f, //Top
 
 		//Vertex 3
-		-xsize, ysize, zsize,	0.0f, 0.0f, 1.0f,	0.0f, 0.0f, //Front
-		-xsize, ysize, zsize,	-1.0f, 0.0f, 0.0f,	0.0f, 0.0f, //Left
+		-xsize, ysize, zsize,	0.0f, 0.0f, 1.0f,	0.0f, 1.0f, //Front
+		-xsize, ysize, zsize,	-1.0f, 0.0f, 0.0f,	1.0f, 1.0f, //Left
 		-xsize, ysize, zsize,	0.0f, 1.0f, 0.0f,	0.0f, 0.0f, //Top
 
 
 		//Back
 
 		//Vertex 4
-		-xsize, -ysize, -zsize,	0.0f, 0.0f, -1.0f,	0.0f, 0.0f, //Back
+		-xsize, -ysize, -zsize,	0.0f, 0.0f, -1.0f,	1.0f, 0.0f, //Back
 		-xsize, -ysize, -zsize,	-1.0f, 0.0f, 0.0f,	0.0f, 0.0f, //Left
-		-xsize, -ysize, -zsize,	0.0f, -1.0f, 0.0f,	0.0f, 0.0f, //Bottom
+		-xsize, -ysize, -zsize,	0.0f, -1.0f, 0.0f,	1.0f, 1.0f, //Bottom
 
 		//Vertex 5
-		xsize, -ysize, -zsize,	1.0f, 0.0f,  0.0f,	0.0f, 0.0f, //Right
+		xsize, -ysize, -zsize,	1.0f, 0.0f,  0.0f,	1.0f, 0.0f, //Right
 		xsize, -ysize, -zsize,	0.0f, 0.0f, -1.0f,	0.0f, 0.0f, //Back
-		xsize, -ysize, -zsize,	0.0f, -1.0f,  0.0f,	0.0f, 0.0f, //Bottom
+		xsize, -ysize, -zsize,	0.0f, -1.0f,  0.0f,	0.0f, 1.0f, //Bottom
 
 		//Vertex 6
-		xsize, ysize, -zsize,	1.0f, 0.0f,  0.0f,	0.0f, 0.0f, //Right
-		xsize, ysize, -zsize,	0.0f, 0.0f, -1.0f,	0.0f, 0.0f, //Back
-		xsize, ysize, -zsize,	0.0f, 1.0f,  0.0f,	0.0f, 0.0f, //Top
+		xsize, ysize, -zsize,	1.0f, 0.0f,  0.0f,	1.0f, 1.0f, //Right
+		xsize, ysize, -zsize,	0.0f, 0.0f, -1.0f,	0.0f, 1.0f, //Back
+		xsize, ysize, -zsize,	0.0f, 1.0f,  0.0f,	1.0f, 1.0f, //Top
 
 		//Vertex 7
-		-xsize, ysize, -zsize,	0.0f, 0.0f, -1.0f,	0.0f, 0.0f, //Back
-		-xsize, ysize, -zsize,	-1.0f, 0.0f, 0.0f,	0.0f, 0.0f, //Left
-		-xsize, ysize, -zsize,	0.0f, 1.0f, 0.0f,	0.0f, 0.0f, //Top
+		-xsize, ysize, -zsize,	0.0f, 0.0f, -1.0f,	1.0f, 1.0f, //Back
+		-xsize, ysize, -zsize,	-1.0f, 0.0f, 0.0f,	0.0f, 1.0f, //Left
+		-xsize, ysize, -zsize,	0.0f, 1.0f, 0.0f,	0.0f, 1.0f, //Top
 
 	};
 	const GLuint index_array_data[] = {

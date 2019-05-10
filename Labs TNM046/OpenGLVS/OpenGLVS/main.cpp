@@ -15,6 +15,7 @@
 #include "MatrixStack.hpp"
 #include "Utilities.hpp"
 #include "TriangleSoup.hpp"
+#include "Texture.hpp"
 
 #ifndef M_PI
 #define M_PI (3.141592653589793)
@@ -35,8 +36,10 @@ int main() {
 	GLint  location_time, location_object, location_light, location_view;
 	GLfloat modelview, projection;
 	MatrixStack myStack; //Stack used for transformations
-	TriangleSoup myShape; 
+	TriangleSoup Box, Sphere; 
 	float PM[16] = { 0 }; //Initialize projection matrix
+	Texture Text1, Text2;
+	GLint location_tex;
 
 	// Init GLFW
 	glfwInit();
@@ -79,9 +82,10 @@ int main() {
 	// Define the viewport dimensions
 	glViewport(0, 0, screenWidth, screenHeight);
 
-	/* <---------------------- Compilation of Shader ----------------------> */
+	/* <---------------------- Compilation of Shaders ----------------------> */
 
 	Shader lightningShader("vertex.glsl", "fragment.glsl");
+	//Shader textureShader("vertex.glsl", "fragmentTex.glsl");
 
 	/* <--------------- Vertex, index and transformation data ---------------> */
 	
@@ -108,13 +112,21 @@ int main() {
 
 	//Note, we use the upper 3x3 of the MV matrix as normal matrix
 
+	/* <---------------------- Texture handling ----------------------> */
+
+	// Locate the sampler2D uniform in the shader program
+	location_tex = glGetUniformLocation(lightningShader.ID, "ourTexture");
+	// Generate one texture object with data from a TGA file
+	Text1.createTexture("textures/box.tga");
+	Text2.createTexture("textures/earth.tga");
+
 	/* <---------------------- Create objects ----------------------> */
 
 	// Intialize the matrix to an identity transformation
 	myStack.init();
 
-	//myShape.createSphere(0.8, 50);
-	myShape.createBox(0.5, 0.5, 0.5);
+	//Sphere.createSphere(0.8, 50);
+	Box.createBox(0.5, 0.5, 0.5);
 
 	// Rendering loop
 	while (!glfwWindowShouldClose(window))
@@ -143,10 +155,16 @@ int main() {
 		//glCullFace(GL_FRONT_AND_BACK);
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //Set to wireframe mode
 
+		//Bind textures
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, Text1.textureID);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, Text2.textureID);
 
 		//// Drawing
 		lightningShader.use();
-		myShape.render();
+		Box.render();
+		glBindTexture(GL_TEXTURE_2D, 0);
 		
 		//Start the stack operations, draw the scene with transformation
 		myStack.push();

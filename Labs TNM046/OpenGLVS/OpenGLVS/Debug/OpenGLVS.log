@@ -1,10 +1,10 @@
 ﻿  main.cpp
-c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(106): warning C4244: '=': conversion from 'GLint' to 'GLfloat', possible loss of data
-c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(155): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(156): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(165): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(171): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(181): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(182): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
-c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(36): warning C4101: 'modelview': unreferenced local variable
+c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(110): warning C4244: '=': conversion from 'GLint' to 'GLfloat', possible loss of data
+c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(173): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(174): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(183): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(189): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(199): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(200): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
+c:\users\josef\desktop\openglroot\labs tnm046\openglvs\openglvs\main.cpp(37): warning C4101: 'modelview': unreferenced local variable
   OpenGLVS.vcxproj -> C:\Users\josef\Desktop\OpenGLRoot\Labs TNM046\OpenGLVS\Debug\OpenGLVS.exe

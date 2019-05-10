@@ -3,6 +3,7 @@
 //Global variables
 uniform float time;
 
+//Lightning Model
 in vec3 aNormal;
 in vec2 st;
 in vec3 fragPos;
@@ -15,6 +16,11 @@ float specularStrength = 0.9;
 
 vec3 objectColor = vec3(0.3f, 0.0f, 0.0f);
 vec3 lightColor = vec3(1.0f, 1.0f, 1.0f);
+
+//Texture
+in vec2 TexCoord;
+uniform sampler2D texture1;
+uniform sampler2D texture2;
 
 void main()
 {
@@ -34,5 +40,9 @@ void main()
 	vec3 Is = specularStrength * spec * lightColor;
 
 	vec3 result = (Ia+Id+Is)*objectColor;
-	fragColor = vec4(result, 1.0);
+	//fragColor = vec4(result, 1.0);
+
+	//Texturing
+	fragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.2);
+	//fragColor = texture(ourTexture, TexCoord);
 }
