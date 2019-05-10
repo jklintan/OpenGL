@@ -11,11 +11,11 @@ out vec4 fragColor;
 in vec3 lightPos;
 
 //Lightning model according to the Phong lighting model
-float ambientStrength = 0.5;
+float ambientStrength = 0.2;
 float specularStrength = 0.9;
 
-vec3 objectColor = vec3(0.3f, 0.0f, 0.0f);
-vec3 lightColor = vec3(1.0f, 1.0f, 1.0f);
+vec3 objectColor = vec3(0.3f, 0.3f, 0.3f);
+vec3 lightColor = vec3(0.7f, 0.7f, 0.7f);
 
 //Texture
 in vec2 TexCoord;
@@ -31,18 +31,20 @@ void main()
 	vec3 norm = normalize(aNormal);
 	vec3 lightDir = normalize(lightPos - fragPos);
 	float diff = max(dot(norm, lightDir), 0.0);
-	vec3 Id = diff*lightColor;
+	//vec3 Id = diff*lightColor; //Light model
+	vec4 texturing = texture(texture1, TexCoord);
+	vec3 Id = 3*vec3(texturing)*lightColor; //texture model
 
 	//Specular lighting
 	vec3 viewDir = normalize(lightPos-fragPos);
 	vec3 reflectDir = reflect(-lightDir, norm);
-	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 64);
+	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 4);
 	vec3 Is = specularStrength * spec * lightColor;
 
 	vec3 result = (Ia+Id+Is)*objectColor;
-	//fragColor = vec4(result, 1.0);
+	fragColor = vec4(result, 1.0);
 
 	//Texturing
-	fragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.2);
+	//fragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.2);
 	//fragColor = texture(ourTexture, TexCoord);
 }

@@ -118,7 +118,7 @@ int main() {
 	location_tex = glGetUniformLocation(lightningShader.ID, "ourTexture");
 	// Generate one texture object with data from a TGA file
 	Text1.createTexture("textures/box.tga");
-	Text2.createTexture("textures/earth.tga");
+	Text2.createTexture("textures/crate.tga");
 
 	/* <---------------------- Create objects ----------------------> */
 
