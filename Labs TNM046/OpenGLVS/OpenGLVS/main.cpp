@@ -16,6 +16,7 @@
 #include "Utilities.hpp"
 #include "TriangleSoup.hpp"
 #include "Texture.hpp"
+#include "Rotator.hpp"
 
 #ifndef M_PI
 #define M_PI (3.141592653589793)
@@ -36,10 +37,12 @@ int main() {
 	GLint  location_time, location_object, location_light, location_view;
 	GLfloat modelview, projection;
 	MatrixStack myStack; //Stack used for transformations
-	TriangleSoup Box, Sphere; 
+	TriangleSoup Box, Sphere, Teapot, Trex; 
 	float PM[16] = { 0 }; //Initialize projection matrix
-	Texture Text1, Text2;
+	Texture Text1, Text2, earthTexture;
 	GLint location_tex;
+	KeyRotator myKeyRotator;
+	MouseRotator myMouseRotator;
 
 	// Init GLFW
 	glfwInit();
@@ -118,21 +121,27 @@ int main() {
 	location_tex = glGetUniformLocation(lightningShader.ID, "ourTexture");
 	// Generate one texture object with data from a TGA file
 	Text1.createTexture("textures/box.tga");
-	Text2.createTexture("textures/crate.tga");
+	Text2.createTexture("textures/trex.tga");
+	earthTexture.createTexture("textures/earth.tga");
 
 	/* <---------------------- Create objects ----------------------> */
 
 	// Intialize the matrix to an identity transformation
 	myStack.init();
 
-	//Sphere.createSphere(0.8, 50);
-	Box.createBox(0.5, 0.5, 0.5);
+	Sphere.createSphere(0.8, 50);
+	//Box.createBox(0.5, 0.5, 0.5);
+	Teapot.readOBJ("./meshes/teapot.obj");
+	Trex.readOBJ("./meshes/trex.obj");
 
 	// Rendering loop
 	while (!glfwWindowShouldClose(window))
 	{
 		// Check key press event
 		glfwPollEvents();
+
+		myKeyRotator.init(window);
+		myMouseRotator.init(window);
 
 		/* <--- Rendering loop ---> */
 
@@ -144,7 +153,7 @@ int main() {
 		//GLuint loc = glGetUniformLocation(lightningShader.ID, "lightDirection");
 		//glUniform3fv(loc, sizeof(loc), (float*)loc);
 
-		//// Clear the colorbuffer
+		//// Clear the colorbuffer & Setup depth buffer
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f); //Set clear color, background
@@ -158,49 +167,70 @@ int main() {
 		//Bind textures
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, Text1.textureID);
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, Text2.textureID);
+
+		myKeyRotator.poll(window);
+		// Create a rotation matrix that depends on myKeyRotator .phi and myKeyRotator . theta
+		
+		myMouseRotator.poll(window);
+		// Create rotation matrix that depends on myMouseRotator . phi and myMouseRotator . theta
 
 		//// Drawing
 		lightningShader.use();
-		Box.render();
+		//Trex.render();
 		glBindTexture(GL_TEXTURE_2D, 0);
-		
+
+
 		//Start the stack operations, draw the scene with transformation
 		myStack.push();
 
 			// The view transformations, world frame
 			myStack.rotX(M_PI / 20);
-			myStack.translate(0, -0.1, 0);
-			//myStack.rotY(M_PI / 12);
-			//myStack.rotY(M_PI);
-
-			// Update the view matrix in the shader
-			glUniformMatrix4fv(location_view, 1, GL_FALSE, myStack.getCurrentMatrix());
-
-			//Add the object to the scene
-			myStack.push();
-			myStack.scale(0.8); //Scale to fit screen
-
-			//myStack.rotY(M_PI*time / 12); //Orbit rotation
-			//myStack.translate(1, 0, 0); //Move the object along the x-axis
-			//myStack.rotY(time/ 10); //Rotate around own axis
-			//myStack.rotZ(time*M_PI/20); //Rotate around own axis
-			myStack.rotY(M_PI / 4);
+			myStack.translate(0.5, -0.2, -0.5);
 
 			// Update the transformation matrix in the shader
 			glUniformMatrix4fv(location_object, 1, GL_FALSE, myStack.getCurrentMatrix());
+			glUniformMatrix4fv(location_view, 1, GL_FALSE, myStack.getCurrentMatrix());
 
-			//Restore the matrix
+			//Center object
+			myStack.push();
+				myStack.translate(-1.4, 0, 0.2);
+				//myStack.rotZ(time);
+				myStack.scale(0.6); //Scale to fit screen
+				myStack.rotY(M_PI/7); //Scale to fit screen
+
+				// Update the transformation matrix in the shader
+				glUniformMatrix4fv(location_object, 1, GL_FALSE, myStack.getCurrentMatrix());
+				glUniformMatrix4fv(location_view, 1, GL_FALSE, myStack.getCurrentMatrix());
+				
+				glBindTexture(GL_TEXTURE_2D, Text2.textureID);
+				Trex.render();
+			myStack.pop();
+
+			myStack.translate(1.0, 0, 0);
+			//Orbiting object
+			myStack.push();
+				myStack.translate(-3, 0, 0);
+				myStack.rotY(time*M_PI / 12);
+				myStack.scale(0.5);
+
+				// Update the transformation matrix in the shader
+				glUniformMatrix4fv(location_object, 1, GL_FALSE, myStack.getCurrentMatrix());
+				glUniformMatrix4fv(location_view, 1, GL_FALSE, myStack.getCurrentMatrix());
+
+				glBindTexture(GL_TEXTURE_2D, earthTexture.textureID);
+				Sphere.render();
 			myStack.pop();
 
 			//Perform the perspective projection
 			myStack.translate(0, 0, -2);
-			myStack.mat4perspective(PM, M_PI/4, 1, 0.5, 10); //Turns PM into the correct projection matrix and multiply to current matrix
+			myStack.mat4perspective(PM, M_PI / 4, 1, 0.5, 10); //Turns PM into the correct projection matrix and multiply to current matrix
 			glUniformMatrix4fv(projection, 1, GL_FALSE, PM); //Send the projection matrix to the vertex shader
+
 
 		//Restore the initial matrix
 		myStack.pop();
+
+		glUseProgram(0);
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);

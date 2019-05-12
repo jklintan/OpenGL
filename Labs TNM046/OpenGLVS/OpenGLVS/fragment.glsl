@@ -11,11 +11,11 @@ out vec4 fragColor;
 in vec3 lightPos;
 
 //Lightning model according to the Phong lighting model
-float ambientStrength = 0.2;
-float specularStrength = 0.9;
+float ambientStrength = 0.6;
+float specularStrength = 0.8;
 
-vec3 objectColor = vec3(0.3f, 0.3f, 0.3f);
-vec3 lightColor = vec3(0.7f, 0.7f, 0.7f);
+vec3 objectColor = vec3(0.4f, 0.3f, 0.3f);
+vec3 lightColor = vec3(1.0f, 1.0f, 1.0f);
 
 //Texture
 in vec2 TexCoord;
