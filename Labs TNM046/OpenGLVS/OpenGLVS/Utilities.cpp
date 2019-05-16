@@ -16,6 +16,7 @@
  */
 
 #include "Utilities.hpp"
+#include <cmath>
 
 #ifdef __WIN32__
  /* Global function pointers for everything we need beyond OpenGL 1.1 */

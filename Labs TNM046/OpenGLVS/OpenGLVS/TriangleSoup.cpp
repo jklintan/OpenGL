@@ -162,7 +162,7 @@ void TriangleSoup::createBox(float xsize, float ysize, float zsize) {
 		//Vertex 4
 		-xsize, -ysize, -zsize,	0.0f, 0.0f, -1.0f,	1.0f, 0.0f, //Back
 		-xsize, -ysize, -zsize,	-1.0f, 0.0f, 0.0f,	0.0f, 0.0f, //Left
-		-xsize, -ysize, -zsize,	0.0f, -1.0f, 0.0f,	1.0f, 1.0f, //Bottom
+		-xsize, -ysize, -zsize,	0.0f, -1.0f, 0.0f,	0.0f, 0.0f, //Bottom
 
 		//Vertex 5
 		xsize, -ysize, -zsize,	1.0f, 0.0f,  0.0f,	1.0f, 0.0f, //Right
